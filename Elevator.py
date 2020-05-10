@@ -17,6 +17,7 @@ class Example(QWidget):  # 主窗口
         gridoutright = QGridLayout()
         grid = QGridLayout()
         grid.setSpacing(0)
+        gridoutright.setSpacing(0)
         gwg = QWidget()  # 准备部件
         rightwg = QWidget()
         gwg.setLayout(grid)  # 部件设置局部布局
@@ -27,8 +28,8 @@ class Example(QWidget):  # 主窗口
         names = [('%s' % i) for i in range(1, 21)]  # 电梯按钮编号
         positions = [(i, j) for j in range(2) for i in range(10)]  # 位置
 
-        nameforall1 = [('▲%s' % i) for i in range(1, 21)]  # 走廊里的按钮，向上
-        nameforall2 = [('▼%s' % i) for i in range(1, 21)]  # 向下
+        nameforall1 = [('▲ %s' % i) for i in range(1, 21)]  # 走廊里的按钮，向上
+        nameforall2 = [('▼ %s' % i) for i in range(1, 21)]  # 向下
 ##############################################################################下面是左边布局
         for inti in range(5):
             for position, name in zip(positions, names):
@@ -47,9 +48,20 @@ class Example(QWidget):  # 主窗口
             grid.setRowMinimumHeight(i, 60)
 
 ##############################################################################下面是右边布局
-
-
-
+        fori=0
+        for i in nameforall1:
+            button=QPushButton(i)
+            button.setFont(QFont("Microsoft YaHei"))
+            button.setMinimumHeight(36)
+            gridoutright.addWidget(button,fori,0)
+            fori=fori+1
+        fori=0
+        for i in nameforall2:
+            button=QPushButton(i)
+            button.setFont(QFont("Microsoft YaHei"))
+            button.setMinimumHeight(36)
+            gridoutright.addWidget(button,fori,1)
+            fori=fori+1
 ##############################################################################
         self.move(300, 150)
         self.setWindowTitle('Elevator-Dispatching Copyright@2020 沈天宇')
