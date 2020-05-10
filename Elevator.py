@@ -29,7 +29,7 @@ class Example(QWidget):  # 主窗口
 
         nameforall1 = [('▲%s' % i) for i in range(1, 21)]  # 走廊里的按钮，向上
         nameforall2 = [('▼%s' % i) for i in range(1, 21)]  # 向下
-
+##############################################################################下面是左边布局
         for inti in range(5):
             for position, name in zip(positions, names):
                 if name == '':
@@ -38,16 +38,19 @@ class Example(QWidget):  # 主窗口
                 button.setFont(QFont("Microsoft YaHei", 12))
                 button.setMaximumHeight(60)  # 按钮最大高度
                 grid.addWidget(button, position[0] + 2, position[1] + inti * 3)
-
         for i in range(5):
             self.lcd = QLCDNumber(self)  # 数字显示
             grid.addWidget(self.lcd, 0, 3 * i, 2, 2)
             self.lab = QLabel(self)  # 这几个label是为了增加缝隙
             grid.addWidget(self.lab, 0, 3 * i + 2, 1, 1)
-
         for i in range(grid.rowCount()):
             grid.setRowMinimumHeight(i, 60)
 
+##############################################################################下面是右边布局
+
+
+
+##############################################################################
         self.move(300, 150)
         self.setWindowTitle('Elevator-Dispatching Copyright@2020 沈天宇')
         self.show()
