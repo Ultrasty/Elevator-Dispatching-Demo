@@ -1,10 +1,9 @@
-########################################################
-#                                                      #
-#                   操作系统 电梯调度                 #
-#                   作者：1851521 沈天宇
-#                   版权所有 侵权必究
-#
-########################################################
+################################################################
+#                                                              #
+#                      操作系统 电梯调度                       #
+#                      作者：1851521 沈天宇                    #
+#                                                              #
+################################################################
 
 import sys, threading, time
 from PyQt5.QtWidgets import *
@@ -47,11 +46,12 @@ class Example(QWidget):  # 主窗口
                 self.button = QPushButton(name)
                 self.button.setFont(QFont("Microsoft YaHei", 12))
                 self.button.setObjectName("{0}+{1}".format(inti + 1, intj))
-                self.button.clicked.connect(partial(set_goal, self.button))
+                self.button.clicked.connect(partial(set_goal, inti + 1, intj))
                 # self.button.clicked.connect(lambda: setgoal(inti+1,intj))# 为啥用lambda运行会出错啊...明明和partial一样的...
                 intj = intj + 1
                 self.button.setMaximumHeight(60)  # 按钮最大高度
                 grid.addWidget(self.button, position[0] + 2, position[1] + inti * 3)
+
         for i in range(5):
             self.lcd = QLCDNumber()  # 数字显示
             self.lcd.setObjectName("{0}".format(i + 1))
@@ -66,16 +66,19 @@ class Example(QWidget):  # 主窗口
         for i in nameforallup:
             self.button = QPushButton(i)
             self.button.setFont(QFont("Microsoft YaHei"))
+            self.button.setObjectName("up{0}".format(fori + 1))
             self.button.setMinimumHeight(36)
-            self.button.clicked.connect(partial(set_global_goal_up, self.button))
+            self.button.clicked.connect(partial(set_global_goal_up, fori + 1))
             gridoutright.addWidget(self.button, 20 - fori, 0)
             fori = fori + 1
+
         fori = 0
         for i in nameforalldown:
             self.button = QPushButton(i)
             self.button.setFont(QFont("Microsoft YaHei"))
+            self.button.setObjectName("down{0}".format(fori + 1))
             self.button.setMinimumHeight(36)
-            self.button.clicked.connect(partial(set_global_goal_down, self.button))
+            self.button.clicked.connect(partial(set_global_goal_down, fori + 1))
             gridoutright.addWidget(self.button, 20 - fori, 1)
             fori = fori + 1
 
@@ -85,26 +88,65 @@ class Example(QWidget):  # 主窗口
         self.show()
 
 
-# def changefloor():
-#     while(1):
-#         time.sleep(3)
-#         ex.findChild(QPushButton, "1+7").setStyleSheet("QPushButton{}")
+def set_goal(elev, flr):  # 设定目标楼层
+    ex.findChild(QPushButton, "{0}+{1}".format(elev, flr)).setStyleSheet(
+        "QPushButton{background-image: url(background.png)}")
+    elevator_goal[elev - 1].add(flr)
 
 
-def set_goal(ob):
-    ob.setStyleSheet("QPushButton{background-image: url(background.png)}")
+def set_global_goal_up(flr):  # 设定楼道里上楼请求所在的楼层
+    ex.findChild(QPushButton, "up{0}".format(flr)).setStyleSheet("QPushButton{background-image: url(background.png)}")
+    people_up.add(flr)
 
 
-def set_global_goal_up(ob):
-    ob.setStyleSheet("QPushButton{background-image: url(background.png)}")
-
-
-def set_global_goal_down(ob):
-    ob.setStyleSheet("QPushButton{background-image: url(background.png)}")
+def set_global_goal_down(flr):  # 设定楼道里下楼请求所在的楼层
+    ex.findChild(QPushButton, "down{0}".format(flr)).setStyleSheet("QPushButton{background-image: url(background.png)}")
+    people_down.add(flr)
 
 
 def check_and_change_floor(int):
-    pass
+    while (1):
+        # 改变电梯楼层
+        if state[int - 1] == 0:
+            pass
+        else:
+            if state[int - 1] == -1:
+                floor[int - 1] = floor[int - 1] - 1
+            else:
+                floor[int - 1] = floor[int - 1] + 1
+        ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
+        ex.findChild(QPushButton, "{0}+{1}".format(int, floor[int - 1])).setStyleSheet(
+            "QPushButton{}")  # 去掉该层的标识
+        elevator_goal[int - 1].discard(floor[int - 1])  # 从要达到的目标楼层中移除该层
+        # 从外部等候楼层中移除该层
+        if state[int - 1] == -1:
+            people_down.discard(floor[int - 1])
+        if state[int - 1] == 1:
+            people_up.discard((floor[int - 1]))
+        # ----------------------状态改变的算法---------------------- #
+
+        # print(elevator_goal[int-1]) # test
+        # print(state[int-1])
+
+        if state[int - 1] == -1:
+            if len(list(elevator_goal[int - 1])) == 0:
+                state[int - 1] = 0
+        else:
+            if state[int - 1] == 0:
+
+                if (len(list(elevator_goal[int - 1])) != 0) and (max(list(elevator_goal[int - 1])) > floor[int - 1]):
+                    state[int - 1] = 1
+                if (len(list(elevator_goal[int - 1])) != 0) and (min(list(elevator_goal[int - 1])) < floor[int - 1]):
+                    state[int - 1] = -1
+            else:
+                if state[int - 1] == 1:
+                    if len(list(elevator_goal[int - 1])) == 0:
+                        state[int - 1] = 0
+
+        # -----------------------显示电梯楼层----------------------- #
+        ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
+        # ------------------------间隔的时间------------------------ #
+        time.sleep(1)
 
 
 if __name__ == '__main__':
@@ -127,18 +169,20 @@ if __name__ == '__main__':
     # 表示当前楼层
     floor = []
     for i in range(5):
-        state.append(1)
+        floor.append(1)
 
-    # 设置初始状态
-    for i in range(5):
-        ex.findChild(QLCDNumber, "{0}".format(i + 1)).display(1)
+    # 表示楼道里的向上的请求
+    people_up = set([])
+
+    # 表示楼道里的向下的请求
+    people_down = set([])
 
     # 五个线程对应五部电梯，每隔一定时间检查每部电梯的状态和elevator_goal数组，并作出相应的行动
-    t1 = threading.Thread(target=check_and_change_floor(1))
-    t2 = threading.Thread(target=check_and_change_floor(2))
-    t3 = threading.Thread(target=check_and_change_floor(3))
-    t4 = threading.Thread(target=check_and_change_floor(4))
-    t5 = threading.Thread(target=check_and_change_floor(5))
+    t1 = threading.Thread(target=check_and_change_floor, args=(1,))
+    t2 = threading.Thread(target=check_and_change_floor, args=(2,))
+    t3 = threading.Thread(target=check_and_change_floor, args=(3,))
+    t4 = threading.Thread(target=check_and_change_floor, args=(4,))
+    t5 = threading.Thread(target=check_and_change_floor, args=(5,))
     t1.start()
     t2.start()
     t3.start()

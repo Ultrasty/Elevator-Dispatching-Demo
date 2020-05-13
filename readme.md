@@ -8,6 +8,8 @@
 
 ## 项目介绍
 
+本项目已托管在GitHub上，项目地址https://github.com/Ultrasty/Elevator-Dispatching-Demo
+
 ### 1.背景
 
 #### 基本任务
