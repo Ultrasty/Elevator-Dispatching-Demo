@@ -62,6 +62,7 @@ class Example(QWidget):  # 主窗口
         for i in range(grid.rowCount()):
             grid.setRowMinimumHeight(i, 60)
 
+        # 暂停按钮
         for i in range(5):
             self.button = QPushButton("暂停")
             self.button.setFont(QFont("Microsoft YaHei", 12))
@@ -69,13 +70,21 @@ class Example(QWidget):  # 主窗口
             self.button.setMinimumHeight(40)
             self.button.clicked.connect(partial(pause, i + 1))
             grid.addWidget(self.button, 12, 3 * i, 1, 2)
+
+        # OPEN显示在下面的按钮上
+        for i in range(5):
+            self.button = QPushButton()
+            self.button.setObjectName("open{0}".format(i + 1))
+            self.button.setMinimumHeight(80)
+            grid.addWidget(self.button, 13, 3 * i, 1, 2)
+
         # --------------------------------------下面是右边布局--------------------------------------#
         fori = 0
         for i in nameforallup:
             self.button = QPushButton(i)
             self.button.setFont(QFont("Microsoft YaHei"))
             self.button.setObjectName("up{0}".format(fori + 1))
-            self.button.setMinimumHeight(38)
+            self.button.setMinimumHeight(42)
             self.button.clicked.connect(partial(set_global_goal_up, fori + 1))
             gridoutright.addWidget(self.button, 20 - fori, 0)
             fori = fori + 1
@@ -85,14 +94,14 @@ class Example(QWidget):  # 主窗口
             self.button = QPushButton(i)
             self.button.setFont(QFont("Microsoft YaHei"))
             self.button.setObjectName("down{0}".format(fori + 1))
-            self.button.setMinimumHeight(38)
+            self.button.setMinimumHeight(42)
             self.button.clicked.connect(partial(set_global_goal_down, fori + 1))
             self.button
             gridoutright.addWidget(self.button, 20 - fori, 1)
             fori = fori + 1
 
         # ----------------------------------------------------------------------------------------#
-        self.move(300, 150)
+        self.move(10, 10)
         self.setWindowTitle('Elevator-Dispatching Copyright@2020 沈天宇')
         self.show()
 
@@ -151,15 +160,21 @@ def check_and_change_floor(int):
             if state[int - 1] == 1:
                 if (floor[int - 1] in elevator_goal[int - 1]) or (floor[int - 1] in people_up):
                     lock[int - 1].release()
-                    ex.findChild(QLCDNumber, "{0}".format(int)).setStyleSheet(
-                        "QLCDNumber{background-image: url(open.png)}")
+                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
+                        "QPushButton{background-image: url(open.png)}")
                     time.sleep(2)
+                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
+                        "QPushButton{}")
                     lock[int - 1].acquire()
 
             if state[int - 1] == -1:
                 if (floor[int - 1] in elevator_goal[int - 1]) or (floor[int - 1] in people_down):
                     lock[int - 1].release()
+                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
+                        "QPushButton{background-image: url(open.png)}")
                     time.sleep(2)
+                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
+                        "QPushButton{}")
                     lock[int - 1].acquire()
 
             if state[int - 1] == 1:
