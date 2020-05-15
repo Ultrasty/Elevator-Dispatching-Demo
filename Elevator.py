@@ -61,13 +61,20 @@ class Example(QWidget):  # 主窗口
         for i in range(grid.rowCount()):
             grid.setRowMinimumHeight(i, 60)
 
+        for i in range(5):
+            self.button = QPushButton("暂停")
+            self.button.setFont(QFont("Microsoft YaHei", 12))
+            self.button.setObjectName("pause{0}".format(i + 1))
+            self.button.setMinimumHeight(40)
+            self.button.clicked.connect(partial(pause, i + 1))
+            grid.addWidget(self.button, 12, 3 * i, 1, 2)
         # --------------------------------------下面是右边布局--------------------------------------#
         fori = 0
         for i in nameforallup:
             self.button = QPushButton(i)
             self.button.setFont(QFont("Microsoft YaHei"))
             self.button.setObjectName("up{0}".format(fori + 1))
-            self.button.setMinimumHeight(36)
+            self.button.setMinimumHeight(38)
             self.button.clicked.connect(partial(set_global_goal_up, fori + 1))
             gridoutright.addWidget(self.button, 20 - fori, 0)
             fori = fori + 1
@@ -77,8 +84,9 @@ class Example(QWidget):  # 主窗口
             self.button = QPushButton(i)
             self.button.setFont(QFont("Microsoft YaHei"))
             self.button.setObjectName("down{0}".format(fori + 1))
-            self.button.setMinimumHeight(36)
+            self.button.setMinimumHeight(38)
             self.button.clicked.connect(partial(set_global_goal_down, fori + 1))
+            self.button
             gridoutright.addWidget(self.button, 20 - fori, 1)
             fori = fori + 1
 
@@ -88,10 +96,20 @@ class Example(QWidget):  # 主窗口
         self.show()
 
 
+def pause(elev):
+    if pause[elev - 1] == 0:
+        pause[elev - 1] = 1
+        ex.findChild(QPushButton, "pause{0}".format(elev)).setText("暂停")
+    else:
+        pause[elev - 1] = 0
+        ex.findChild(QPushButton, "pause{0}".format(elev)).setText("启动")
+
 def set_goal(elev, flr):  # 设定目标楼层
+    lock[elev - 1].acquire()  # 获得锁
     ex.findChild(QPushButton, "{0}+{1}".format(elev, flr)).setStyleSheet(
         "QPushButton{background-image: url(background.png)}")
     elevator_goal[elev - 1].add(flr)
+    lock[elev - 1].release()  # 释放锁
 
 
 def set_global_goal_up(flr):  # 设定楼道里上楼请求所在的楼层
@@ -106,46 +124,62 @@ def set_global_goal_down(flr):  # 设定楼道里下楼请求所在的楼层
 
 def check_and_change_floor(int):
     while (1):
-        # 改变电梯楼层
-        if state[int - 1] == 0:
-            pass
-        else:
-            if state[int - 1] == -1:
-                floor[int - 1] = floor[int - 1] - 1
-            else:
-                floor[int - 1] = floor[int - 1] + 1
-        ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
-        ex.findChild(QPushButton, "{0}+{1}".format(int, floor[int - 1])).setStyleSheet(
-            "QPushButton{}")  # 去掉该层的标识
-        elevator_goal[int - 1].discard(floor[int - 1])  # 从要达到的目标楼层中移除该层
-        # 从外部等候楼层中移除该层
-        if state[int - 1] == -1:
-            people_down.discard(floor[int - 1])
-        if state[int - 1] == 1:
-            people_up.discard((floor[int - 1]))
-        # ----------------------状态改变的算法---------------------- #
 
-        # print(elevator_goal[int-1]) # test
-        # print(state[int-1])
-
-        if state[int - 1] == -1:
-            if len(list(elevator_goal[int - 1])) == 0:
-                state[int - 1] = 0
-        else:
+        if pause[int - 1] == 1:
+            # 改变电梯楼层
+            lock[int - 1].acquire()  # 加锁
             if state[int - 1] == 0:
-
-                if (len(list(elevator_goal[int - 1])) != 0) and (max(list(elevator_goal[int - 1])) > floor[int - 1]):
-                    state[int - 1] = 1
-                if (len(list(elevator_goal[int - 1])) != 0) and (min(list(elevator_goal[int - 1])) < floor[int - 1]):
-                    state[int - 1] = -1
+                pass
             else:
-                if state[int - 1] == 1:
-                    if len(list(elevator_goal[int - 1])) == 0:
-                        state[int - 1] = 0
+                if state[int - 1] == -1:
+                    floor[int - 1] = floor[int - 1] - 1
+                else:
+                    floor[int - 1] = floor[int - 1] + 1
+            ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
+            ex.findChild(QPushButton, "{0}+{1}".format(int, floor[int - 1])).setStyleSheet(
+                "QPushButton{}")  # 去掉该层的标识
 
-        # -----------------------显示电梯楼层----------------------- #
-        ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
-        # ------------------------间隔的时间------------------------ #
+            # 从外部等候楼层中移除该层
+            if state[int - 1] == -1:
+                people_down.discard(floor[int - 1])  # 移除楼层
+                ex.findChild(QPushButton, "down{0}".format(floor[int - 1])).setStyleSheet(
+                    "QPushButton{}")  # 移除标识
+            if state[int - 1] == 1:
+                people_up.discard((floor[int - 1]))  # 移除楼层
+                ex.findChild(QPushButton, "up{0}".format(floor[int - 1])).setStyleSheet(
+                    "QPushButton{}")  # 移除标识
+
+            # if floor[int-1] in elevator_goal[int-1]:
+            #     print("haha")
+            elevator_goal[int - 1].discard(floor[int - 1])  # 从要达到的目标楼层中移除该层
+            # ----------------------状态改变的算法---------------------- #
+
+            if state[int - 1] == -1:  # 如果当前状态是向下
+                if len(list(elevator_goal[int - 1])) == 0:
+                    state[int - 1] = 0
+                if (len(list(elevator_goal[int - 1])) != 0) and (
+                        min(list(elevator_goal[int - 1])) > floor[int - 1]):
+                    state[int - 1] = 1
+
+            if state[int - 1] == 1:  # 如果当前状态是向上
+                if len(list(elevator_goal[int - 1])) == 0:
+                    state[int - 1] = 0
+                if (len(list(elevator_goal[int - 1])) != 0) and (
+                        max(list(elevator_goal[int - 1])) < floor[int - 1]):
+                    state[int - 1] = -1
+
+            if state[int - 1] == 0:  # 如果当前状态是静止
+                if (len(list(elevator_goal[int - 1])) != 0) and (
+                        max(list(elevator_goal[int - 1])) > floor[int - 1]):
+                    state[int - 1] = 1
+                if (len(list(elevator_goal[int - 1])) != 0) and (
+                        min(list(elevator_goal[int - 1])) < floor[int - 1]):
+                    state[int - 1] = -1
+
+            # -----------------------显示电梯楼层----------------------- #
+            ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
+            # ------------------------间隔的时间------------------------ #
+            lock[int - 1].release()  # 释放锁
         time.sleep(1)
 
 
@@ -166,6 +200,11 @@ if __name__ == '__main__':
     for i in range(5):
         state.append(0)
 
+    # 指示该电梯是否暂停运行
+    pause = []
+    for i in range(5):
+        pause.append(1)
+
     # 表示当前楼层
     floor = []
     for i in range(5):
@@ -176,6 +215,11 @@ if __name__ == '__main__':
 
     # 表示楼道里的向下的请求
     people_down = set([])
+
+    # 5个锁
+    lock = []
+    for i in range(5):
+        lock.append(threading.Lock())
 
     # 五个线程对应五部电梯，每隔一定时间检查每部电梯的状态和elevator_goal数组，并作出相应的行动
     t1 = threading.Thread(target=check_and_change_floor, args=(1,))

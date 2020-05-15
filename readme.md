@@ -65,8 +65,35 @@ python Elevator.py
 
 ## 遇到的问题以及解决
 
-程序在运行的时候有时候会崩溃，我怀疑是因为多线程读写冲突，于是让线程在读写要维护的全局变量的时候必须先获得一个锁。
+程序在运行的时候有时候会崩溃，怀疑是因为多个线程同时读写一个变量导致的，于是让线程在读写要维护的全局变量的时候必须先获得一个锁。
 
+```python
+# 设定5个锁
+    lock=[]
+    for i in range(5):
+        lock.append(threading.Lock())
+```
+需要读写系统要维护的变量时，加锁，读写完成后再释放锁
+```python
+def check_and_change_floor(int):
+    while (1):
+        # 改变电梯楼层
+        lock[int-1].acquire() # 加锁
+        ...
+        
+        ...
+        lock[int-1].release() # 释放锁
+        time.sleep(1)
+```
+以及
+```python
+def set_goal(elev, flr):  # 设定目标楼层
+    lock[elev-1].acquire() # 获得锁
+    ...
+    
+    ...
+    lock[elev-1].release() # 释放锁
+```
 
 
 ## 运行演示
