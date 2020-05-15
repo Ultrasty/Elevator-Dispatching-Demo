@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8dc5b38a-cb46-4af0-8b1b-8c04f164058c" name="Default Changelist" comment="">
+    <list default="true" id="8dc5b38a-cb46-4af0-8b1b-8c04f164058c" name="Default Changelist" comment="#9 实现了暂停 以及OPEN！这是个很好的版本！下一步是加上楼道内的按钮">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Elevator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Elevator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/初始状态.png" beforeDir="false" afterPath="$PROJECT_DIR$/初始状态.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +118,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589546510367</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="#9 实现了暂停 以及OPEN！这是个很好的版本！下一步是加上楼道内的按钮">
+      <created>1589548324593</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1589548324593</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -130,33 +139,34 @@
     <MESSAGE value="#7 电梯开始运行了！但是会坠梯" />
     <MESSAGE value="#8 增加了暂停的功能按键" />
     <MESSAGE value="#9 open出现问题。。。" />
-    <option name="LAST_COMMIT_MESSAGE" value="#9 open出现问题。。。" />
+    <MESSAGE value="#9 实现了暂停 以及OPEN！这是个很好的版本！下一步是加上楼道内的按钮" />
+    <option name="LAST_COMMIT_MESSAGE" value="#9 实现了暂停 以及OPEN！这是个很好的版本！下一步是加上楼道内的按钮" />
   </component>
   <component name="WindowStateProjectService">
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589297420220">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1589297420220" />
-    <state x="409" y="4" key="CommitChangelistDialog2" timestamp="1589546509565">
+    <state x="409" y="4" key="CommitChangelistDialog2" timestamp="1589553695700">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="409" y="4" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1589546509565" />
-    <state width="1515" height="150" key="GridCell.Tab.0.bottom" timestamp="1589548227811">
+    <state x="409" y="4" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1589553695700" />
+    <state width="1515" height="150" key="GridCell.Tab.0.bottom" timestamp="1589560854003">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="150" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589548227811" />
-    <state width="1515" height="150" key="GridCell.Tab.0.center" timestamp="1589548227810">
+    <state width="1515" height="150" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589560854003" />
+    <state width="1515" height="150" key="GridCell.Tab.0.center" timestamp="1589560854003">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="150" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1589548227810" />
-    <state width="1515" height="150" key="GridCell.Tab.0.left" timestamp="1589548227810">
+    <state width="1515" height="150" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1589560854003" />
+    <state width="1515" height="150" key="GridCell.Tab.0.left" timestamp="1589560854003">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="150" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1589548227810" />
-    <state width="1515" height="150" key="GridCell.Tab.0.right" timestamp="1589548227810">
+    <state width="1515" height="150" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1589560854003" />
+    <state width="1515" height="150" key="GridCell.Tab.0.right" timestamp="1589560854003">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="150" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1589548227810" />
+    <state width="1515" height="150" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1589560854003" />
     <state x="457" y="412" key="com.intellij.ide.util.TipDialog" timestamp="1589546399023">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

@@ -8,8 +8,6 @@
 import sys, threading, time
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5 import QtCore, QtGui, QtWidgets
 from functools import partial
 
 
@@ -20,6 +18,11 @@ class Example(QWidget):  # 主窗口
         self.initUI()
 
     def initUI(self):
+        # 设置背景图片
+        # palette = QPalette()
+        # palette.setBrush(QPalette.Background, QBrush(QPixmap("beijing.png")))
+        # self.setPalette(palette)
+
         wlayout = QHBoxLayout()  # 总体布局：横向，其中嵌套了两个网格布局，emmmm 目前总体感觉还行，不想花时间美化了，先写业务逻辑
         gridoutright = QGridLayout()
         grid = QGridLayout()
@@ -126,11 +129,19 @@ def set_goal(elev, flr):  # 设定目标楼层
 def set_global_goal_up(flr):  # 设定楼道里上楼请求所在的楼层
     ex.findChild(QPushButton, "up{0}".format(flr)).setStyleSheet("QPushButton{background-image: url(background.png)}")
     people_up.add(flr)
+    elevator_goal[
+        [abs(floor[0] - flr), abs(floor[1] - flr), abs(floor[2] - flr), abs(floor[3] - flr), abs(floor[4] - flr)].index(
+            min(abs(floor[0] - flr), abs(floor[1] - flr), abs(floor[2] - flr), abs(floor[3] - flr),
+                abs(floor[4] - flr)))].add(flr)
 
 
 def set_global_goal_down(flr):  # 设定楼道里下楼请求所在的楼层
     ex.findChild(QPushButton, "down{0}".format(flr)).setStyleSheet("QPushButton{background-image: url(background.png)}")
     people_down.add(flr)
+    elevator_goal[
+        [abs(floor[0] - flr), abs(floor[1] - flr), abs(floor[2] - flr), abs(floor[3] - flr), abs(floor[4] - flr)].index(
+            min(abs(floor[0] - flr), abs(floor[1] - flr), abs(floor[2] - flr), abs(floor[3] - flr),
+                abs(floor[4] - flr)))].add(flr)
 
 
 def check_and_change_floor(int):
