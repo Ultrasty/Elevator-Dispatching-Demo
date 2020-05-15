@@ -12,7 +12,9 @@
 
 本项目已托管在GitHub上，项目地址https://github.com/Ultrasty/Elevator-Dispatching-Demo
 
-**程序经过调试，除了偶尔会闪退之外没有bug！**闪退可能是因为没用QThread而使用了python标准库自带的threading的原因，因为时间问题没有换过来。
+导出的PDF格式代码缩进有点问题，可能还是在`GitHub`上看更加清楚
+
+**程序经过调试，除了偶尔会闪退之外没有重大`bug`！**闪退可能是因为没用`QThread`而使用了`python`标准库自带的`threading`的原因，因为时间问题没有换过来。
 
 ### 1.背景
 
