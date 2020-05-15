@@ -54,6 +54,7 @@ class Example(QWidget):  # 主窗口
 
         for i in range(5):
             self.lcd = QLCDNumber()  # 数字显示
+            # self.lcd.setStyleSheet("QLCDNumber{background-image: url(open.png)}")
             self.lcd.setObjectName("{0}".format(i + 1))
             grid.addWidget(self.lcd, 0, 3 * i, 2, 2)
             self.lab = QLabel(self)  # 这几个label是为了增加缝隙
@@ -104,6 +105,7 @@ def pause(elev):
         pause[elev - 1] = 0
         ex.findChild(QPushButton, "pause{0}".format(elev)).setText("启动")
 
+
 def set_goal(elev, flr):  # 设定目标楼层
     lock[elev - 1].acquire()  # 获得锁
     ex.findChild(QPushButton, "{0}+{1}".format(elev, flr)).setStyleSheet(
@@ -141,17 +143,31 @@ def check_and_change_floor(int):
 
             # 从外部等候楼层中移除该层
             if state[int - 1] == -1:
-                people_down.discard(floor[int - 1])  # 移除楼层
                 ex.findChild(QPushButton, "down{0}".format(floor[int - 1])).setStyleSheet(
                     "QPushButton{}")  # 移除标识
             if state[int - 1] == 1:
-                people_up.discard((floor[int - 1]))  # 移除楼层
                 ex.findChild(QPushButton, "up{0}".format(floor[int - 1])).setStyleSheet(
                     "QPushButton{}")  # 移除标识
+            if state[int - 1] == 1:
+                if (floor[int - 1] in elevator_goal[int - 1]) or (floor[int - 1] in people_up):
+                    lock[int - 1].release()
+                    ex.findChild(QLCDNumber, "{0}".format(int)).setStyleSheet(
+                        "QLCDNumber{background-image: url(open.png)}")
+                    time.sleep(2)
+                    lock[int - 1].acquire()
 
-            # if floor[int-1] in elevator_goal[int-1]:
-            #     print("haha")
+            if state[int - 1] == -1:
+                if (floor[int - 1] in elevator_goal[int - 1]) or (floor[int - 1] in people_down):
+                    lock[int - 1].release()
+                    time.sleep(2)
+                    lock[int - 1].acquire()
+
+            if state[int - 1] == 1:
+                people_up.discard((floor[int - 1]))  # 移除楼层
+            if state[int - 1] == -1:
+                people_down.discard(floor[int - 1])  # 移除楼层
             elevator_goal[int - 1].discard(floor[int - 1])  # 从要达到的目标楼层中移除该层
+
             # ----------------------状态改变的算法---------------------- #
 
             if state[int - 1] == -1:  # 如果当前状态是向下
