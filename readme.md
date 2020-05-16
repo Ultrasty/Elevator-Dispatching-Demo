@@ -11,13 +11,11 @@
 
 ## 项目介绍
 
-******
-
 本项目已托管在GitHub上，项目地址https://github.com/Ultrasty/Elevator-Dispatching-Demo
 
 导出的PDF格式代码缩进有点问题，可能还是在`GitHub`上看更加清楚
 
-**程序经过调试，除了偶尔会闪退之外没有重大`bug`！**闪退可能是因为没用`QThread`而使用了`python`标准库自带的`threading`的原因，因为时间问题没有换过来。
+**程序经过调试，除了偶尔会闪退之外没有重大`bug` ！ **闪退可能是因为没用`QThread`而使用了`python`标准库自带的`threading`的原因，因为时间问题没有换过来。
 
 **相同的代码，在`linux`上也进行了测试，暂未发现闪退的现象！**
 
@@ -57,8 +55,6 @@ python Elevator.py
 
 
 ## 具体算法
-
-******
 
 过程式编程，电梯的状态使用一组全局变量`elevator_goal`、`state`、`pause`、`floor`表示，线程间通过共享的这组全局变量进行通信，通过维护这组变量实现电梯的调度，使用一个锁`lock`保证读写不冲突。
 
@@ -111,7 +107,7 @@ def set_goal(elev, flr):  # 根据电梯内的按钮设定目标楼层
 
 当按下外部的按钮时，该楼层会被设为某一部电梯的任务楼层，该电梯即为距离该楼层最近的一部电梯。
 
-```
+```python
 def set_global_goal_up(flr):  # 设定楼道里上楼请求所在的楼层
     ex.findChild(QPushButton, "up{0}".format(flr)).setStyleSheet("QPushButton{background-image: url(background.png)}")
     people_up.add(flr)
@@ -241,8 +237,6 @@ def check_and_change_floor(int):
 
 ## 其他功能
 
-******
-
 #### 暂停
 
 通过变量pause指示某部电梯是否暂停，若第`i`部电梯的pause值为0，则表示暂停运行
@@ -264,7 +258,7 @@ def check_and_change_floor(int):
 
 通过`sleep()`来使线程进入睡眠，并且在进入睡眠前释放掉锁。
 
-```
+```python
             if state[int - 1] == 1:
                 if (floor[int - 1] in elevator_goal[int - 1]) or (floor[int - 1] in people_up):
                     lock[int - 1].release()
@@ -289,8 +283,6 @@ def check_and_change_floor(int):
 
 
 ## 遇到的问题
-
-******
 
 程序在运行的时候有时候会崩溃，怀疑是因为多个线程同时读写一个变量导致的，于是让线程在读写要维护的全局变量的时候必须先获得一个锁，以进行线程间的同步。
 
@@ -329,7 +321,6 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 ## 运行演示
 
-******
 
 + 初始状态
 
@@ -354,13 +345,11 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 ## 心得体会
 
-******
 
 ​		此次项目作业是使用`python`语言编写的，因为代码简单可以节省不少时间用来界面布局。因为之前基本都是用` c++`语言，所以花了一定的时间来熟悉`python`以及`pyqt5`。经过多次调试运行来修正代码，对于一个小型`python`项目有了一个简单的了解，并且对特定环境下多线程编程方法更加熟悉了。
 
 ## 参考书籍
 
-******
 
 因开发`GUI`需要用到*PyQt5*,因此参考了《*PyQt5*快速开发与实战》
 
@@ -372,4 +361,4 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 如果你觉得本文对你有帮助，欢迎支持一下作者，一分钱也是可以滴。
 
-![](https://img2020.cnblogs.com/blog/1997201/202005/1997201-20200516170430498-705881289.jpg)
+<img src="https://img2020.cnblogs.com/blog/1997201/202005/1997201-20200516225137235-1474586653.jpg" align="left">
