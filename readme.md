@@ -2,8 +2,6 @@
 
 ###### 操作系统第一次作业
 
-### 1851521 沈天宇
-
 <p align="left">
   <a href="https://circleci.com/gh/vuejs/vue/tree/dev"><img src="https://img.shields.io/circleci/project/github/vuejs/vue/dev.svg?sanitize=true" alt="Build Status"></a>
 </p>
