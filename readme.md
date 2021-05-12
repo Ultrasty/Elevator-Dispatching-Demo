@@ -358,12 +358,15 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 
 ## 赞助
-
+<div>
 如果你觉得本文对你有帮助，欢迎支持一下作者，一分钱也是可以滴。
 
-<img src="https://img2020.cnblogs.com/blog/1997201/202005/1997201-20200516225137235-1474586653.jpg" align="left">
 
+<img src="https://img2020.cnblogs.com/blog/1997201/202005/1997201-20200516225137235-1474586653.jpg" align="left">
+</div>
+<div>
 以太币：0xa91339Bba7AfE768a0001928DDB97A008B8bb125
 
-<img src="https://user-images.githubusercontent.com/51046846/117927941-7606f600-b32d-11eb-97e0-41dcccbe3388.png" align="left">
 
+<img src="https://user-images.githubusercontent.com/51046846/117927941-7606f600-b32d-11eb-97e0-41dcccbe3388.png" align="left">
+</div>
