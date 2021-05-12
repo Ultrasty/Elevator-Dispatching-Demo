@@ -317,6 +317,8 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 但是后来这个问题又出现了，百度谷歌退出时的错误代码也没能找到答案，仔细的想了一下，可能是因为`python`标准库自带的threading和pyqt5不能很好的协作，因此每次运行都会出现一些随机性的问题，而`pyqt5`提供了一个`QThread`（`PyQt5.QtCore.QThread`）可以提供多线程编程功能，在`python`自带多线程库的前提下，`pyqt5`还要有自己的多线程方法，可能就是为了更好的进行同步吧，但是由于时间原因，所以没有将`threading`换成`QThread`。
 
+
+
 ## 运行演示
 
 如果下面的图片显示不出来，买个代理吧。
@@ -324,7 +326,6 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 + 初始状态
 
-  
 
 ![初始状态](https://img2020.cnblogs.com/blog/1997201/202005/1997201-20200516170358778-569006344.png)
 
@@ -343,10 +344,13 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 更多的程序运行时详细信息可见我的录屏demo.mp4
 
+
+
 ## 心得体会
 
-
 ​		此次项目作业是使用`python`语言编写的，因为代码简单可以节省不少时间用来界面布局。因为之前基本都是用` c++`语言，所以花了一定的时间来熟悉`python`以及`pyqt5`。经过多次调试运行来修正代码，对于一个小型`python`项目有了一个简单的了解，并且对特定环境下多线程编程方法更加熟悉了。
+
+
 
 ## 参考书籍
 
@@ -360,18 +364,13 @@ def set_goal(elev, flr):  # 设定目标楼层
 ## 赞助
 
 
-
-<div>
 如果你觉得本文对你有帮助，欢迎支持一下作者，一分钱也是可以滴。
-</div>
-<img src="https://img2020.cnblogs.com/blog/1997201/202005/1997201-20200516225137235-1474586653.jpg" align="left" style="width:60%">
 
-******
+<img src="https://img2020.cnblogs.com/blog/1997201/202005/1997201-20200516225137235-1474586653.jpg" align="left" style="width:35%">
 
-<div>
-ETH 以太币：0xa91339Bba7AfE768a0001928DDB97A008B8bb125
-</div>
-<img src="https://user-images.githubusercontent.com/51046846/117927941-7606f600-b32d-11eb-97e0-41dcccbe3388.png" align="left" style="width:60%">
+##### ETH 以太币：0xa91339Bba7AfE768a0001928DDB97A008B8bb125
+
+<img src="https://user-images.githubusercontent.com/51046846/117927941-7606f600-b32d-11eb-97e0-41dcccbe3388.png" align="left" style="width:35%">
 
 
 
