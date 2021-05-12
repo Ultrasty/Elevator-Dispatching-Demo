@@ -365,5 +365,5 @@ def set_goal(elev, flr):  # 设定目标楼层
 
 以太币：0xa91339Bba7AfE768a0001928DDB97A008B8bb125
 
-![image](https://user-images.githubusercontent.com/51046846/117927941-7606f600-b32d-11eb-97e0-41dcccbe3388.png)
+<img src="https://user-images.githubusercontent.com/51046846/117927941-7606f600-b32d-11eb-97e0-41dcccbe3388.png" align="left">
 
