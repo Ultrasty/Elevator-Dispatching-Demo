@@ -1,14 +1,19 @@
-################################################################
-#                                                              #
-#                      操作系统 电梯调度                       #
-#                      作者：1851521 沈天宇                    #
-#                                                              #
-################################################################
+# -*- coding: utf-8 -*-
+# @Time    : 2020/05/10
+# @Author  : STY
+# @Email   : 1455670697@qq.com
+# @File    : Elevator.py
+# @Software: PyCharm
 
-import sys, threading, time
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
+
+import sys
+import threading
+import time
 from functools import partial
+
+from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 
 class Example(QWidget):  # 主窗口
@@ -99,7 +104,6 @@ class Example(QWidget):  # 主窗口
             self.button.setObjectName("down{0}".format(fori + 1))
             self.button.setMinimumHeight(42)
             self.button.clicked.connect(partial(set_global_goal_down, fori + 1))
-            self.button
             gridoutright.addWidget(self.button, 20 - fori, 1)
             fori = fori + 1
 
@@ -107,6 +111,99 @@ class Example(QWidget):  # 主窗口
         self.move(10, 10)
         self.setWindowTitle('Elevator-Dispatching Copyright@2020 沈天宇')
         self.show()
+
+
+class WorkThread(QThread):
+    # 实例化一个信号对象
+    trigger = pyqtSignal(int)
+
+    def __init__(self, the_int):
+        super(WorkThread, self).__init__()
+        self.int = the_int
+        self.trigger.connect(check)
+
+    def run(self):
+        while (1):
+            self.trigger.emit(self.int)
+            time.sleep(0.01)
+
+
+def check(the_int):
+    if pause[the_int - 1] == 1:
+        # 改变电梯楼层
+        lock[the_int - 1].acquire()  # 加锁
+        if state[the_int - 1] == 0:
+            pass
+        else:
+            if state[the_int - 1] == -1:
+                floor[the_int - 1] = floor[the_int - 1] - 1
+            else:
+                floor[the_int - 1] = floor[the_int - 1] + 1
+        ex.findChild(QLCDNumber, "{0}".format(the_int)).display(floor[the_int - 1])
+        ex.findChild(QPushButton, "{0}+{1}".format(the_int, floor[the_int - 1])).setStyleSheet(
+            "QPushButton{}")  # 去掉该层的标识
+
+        # 从外部等候楼层中移除该层
+        if state[the_int - 1] == -1:
+            ex.findChild(QPushButton, "down{0}".format(floor[the_int - 1])).setStyleSheet(
+                "QPushButton{}")  # 移除标识
+        if state[the_int - 1] == 1:
+            ex.findChild(QPushButton, "up{0}".format(floor[the_int - 1])).setStyleSheet(
+                "QPushButton{}")  # 移除标识
+        if state[the_int - 1] == 1:
+            if (floor[the_int - 1] in elevator_goal[the_int - 1]) or (floor[the_int - 1] in people_up):
+                lock[the_int - 1].release()
+                ex.findChild(QPushButton, "open{0}".format(the_int)).setStyleSheet(
+                    "QPushButton{background-image: url(open.png)}")
+                # time.sleep(2)
+                ex.findChild(QPushButton, "open{0}".format(the_int)).setStyleSheet(
+                    "QPushButton{}")
+                lock[the_int - 1].acquire()
+
+        if state[the_int - 1] == -1:
+            if (floor[the_int - 1] in elevator_goal[the_int - 1]) or (floor[the_int - 1] in people_down):
+                lock[the_int - 1].release()
+                ex.findChild(QPushButton, "open{0}".format(the_int)).setStyleSheet(
+                    "QPushButton{background-image: url(open.png)}")
+                # time.sleep(2)
+                ex.findChild(QPushButton, "open{0}".format(the_int)).setStyleSheet(
+                    "QPushButton{}")
+                lock[the_int - 1].acquire()
+
+        if state[the_int - 1] == 1:
+            people_up.discard((floor[the_int - 1]))  # 移除楼层
+        if state[the_int - 1] == -1:
+            people_down.discard(floor[the_int - 1])  # 移除楼层
+        elevator_goal[the_int - 1].discard(floor[the_int - 1])  # 从要达到的目标楼层中移除该层
+
+        # ----------------------状态改变的算法---------------------- #
+
+        if state[the_int - 1] == -1:  # 如果当前状态是向下
+            if len(list(elevator_goal[the_int - 1])) == 0:
+                state[the_int - 1] = 0
+            if (len(list(elevator_goal[the_int - 1])) != 0) and (
+                    min(list(elevator_goal[the_int - 1])) > floor[the_int - 1]):
+                state[the_int - 1] = 1
+
+        if state[the_int - 1] == 1:  # 如果当前状态是向上
+            if len(list(elevator_goal[the_int - 1])) == 0:
+                state[the_int - 1] = 0
+            if (len(list(elevator_goal[the_int - 1])) != 0) and (
+                    max(list(elevator_goal[the_int - 1])) < floor[the_int - 1]):
+                state[the_int - 1] = -1
+
+        if state[the_int - 1] == 0:  # 如果当前状态是静止
+            if (len(list(elevator_goal[the_int - 1])) != 0) and (
+                    max(list(elevator_goal[the_int - 1])) > floor[the_int - 1]):
+                state[the_int - 1] = 1
+            if (len(list(elevator_goal[the_int - 1])) != 0) and (
+                    min(list(elevator_goal[the_int - 1])) < floor[the_int - 1]):
+                state[the_int - 1] = -1
+
+        # -----------------------显示电梯楼层----------------------- #
+        ex.findChild(QLCDNumber, "{0}".format(the_int)).display(floor[the_int - 1])
+        # ------------------------间隔的时间------------------------ #
+        lock[the_int - 1].release()  # 释放锁
 
 
 def pause(elev):
@@ -142,87 +239,6 @@ def set_global_goal_down(flr):  # 设定楼道里下楼请求所在的楼层
         [abs(floor[0] - flr), abs(floor[1] - flr), abs(floor[2] - flr), abs(floor[3] - flr), abs(floor[4] - flr)].index(
             min(abs(floor[0] - flr), abs(floor[1] - flr), abs(floor[2] - flr), abs(floor[3] - flr),
                 abs(floor[4] - flr)))].add(flr)
-
-
-def check_and_change_floor(int):
-    while (1):
-
-        if pause[int - 1] == 1:
-            # 改变电梯楼层
-            lock[int - 1].acquire()  # 加锁
-            if state[int - 1] == 0:
-                pass
-            else:
-                if state[int - 1] == -1:
-                    floor[int - 1] = floor[int - 1] - 1
-                else:
-                    floor[int - 1] = floor[int - 1] + 1
-            ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
-            ex.findChild(QPushButton, "{0}+{1}".format(int, floor[int - 1])).setStyleSheet(
-                "QPushButton{}")  # 去掉该层的标识
-
-            # 从外部等候楼层中移除该层
-            if state[int - 1] == -1:
-                ex.findChild(QPushButton, "down{0}".format(floor[int - 1])).setStyleSheet(
-                    "QPushButton{}")  # 移除标识
-            if state[int - 1] == 1:
-                ex.findChild(QPushButton, "up{0}".format(floor[int - 1])).setStyleSheet(
-                    "QPushButton{}")  # 移除标识
-            if state[int - 1] == 1:
-                if (floor[int - 1] in elevator_goal[int - 1]) or (floor[int - 1] in people_up):
-                    lock[int - 1].release()
-                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
-                        "QPushButton{background-image: url(open.png)}")
-                    time.sleep(2)
-                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
-                        "QPushButton{}")
-                    lock[int - 1].acquire()
-
-            if state[int - 1] == -1:
-                if (floor[int - 1] in elevator_goal[int - 1]) or (floor[int - 1] in people_down):
-                    lock[int - 1].release()
-                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
-                        "QPushButton{background-image: url(open.png)}")
-                    time.sleep(2)
-                    ex.findChild(QPushButton, "open{0}".format(int)).setStyleSheet(
-                        "QPushButton{}")
-                    lock[int - 1].acquire()
-
-            if state[int - 1] == 1:
-                people_up.discard((floor[int - 1]))  # 移除楼层
-            if state[int - 1] == -1:
-                people_down.discard(floor[int - 1])  # 移除楼层
-            elevator_goal[int - 1].discard(floor[int - 1])  # 从要达到的目标楼层中移除该层
-
-            # ----------------------状态改变的算法---------------------- #
-
-            if state[int - 1] == -1:  # 如果当前状态是向下
-                if len(list(elevator_goal[int - 1])) == 0:
-                    state[int - 1] = 0
-                if (len(list(elevator_goal[int - 1])) != 0) and (
-                        min(list(elevator_goal[int - 1])) > floor[int - 1]):
-                    state[int - 1] = 1
-
-            if state[int - 1] == 1:  # 如果当前状态是向上
-                if len(list(elevator_goal[int - 1])) == 0:
-                    state[int - 1] = 0
-                if (len(list(elevator_goal[int - 1])) != 0) and (
-                        max(list(elevator_goal[int - 1])) < floor[int - 1]):
-                    state[int - 1] = -1
-
-            if state[int - 1] == 0:  # 如果当前状态是静止
-                if (len(list(elevator_goal[int - 1])) != 0) and (
-                        max(list(elevator_goal[int - 1])) > floor[int - 1]):
-                    state[int - 1] = 1
-                if (len(list(elevator_goal[int - 1])) != 0) and (
-                        min(list(elevator_goal[int - 1])) < floor[int - 1]):
-                    state[int - 1] = -1
-
-            # -----------------------显示电梯楼层----------------------- #
-            ex.findChild(QLCDNumber, "{0}".format(int)).display(floor[int - 1])
-            # ------------------------间隔的时间------------------------ #
-            lock[int - 1].release()  # 释放锁
-        time.sleep(1)
 
 
 if __name__ == '__main__':
@@ -264,11 +280,12 @@ if __name__ == '__main__':
         lock.append(threading.Lock())
 
     # 五个线程对应五部电梯，每隔一定时间检查每部电梯的状态和elevator_goal数组，并作出相应的行动
-    t1 = threading.Thread(target=check_and_change_floor, args=(1,))
-    t2 = threading.Thread(target=check_and_change_floor, args=(2,))
-    t3 = threading.Thread(target=check_and_change_floor, args=(3,))
-    t4 = threading.Thread(target=check_and_change_floor, args=(4,))
-    t5 = threading.Thread(target=check_and_change_floor, args=(5,))
+    t1 = WorkThread(1)
+    t2 = WorkThread(2)
+    t3 = WorkThread(3)
+    t4 = WorkThread(4)
+    t5 = WorkThread(5)
+
     t1.start()
     t2.start()
     t3.start()
