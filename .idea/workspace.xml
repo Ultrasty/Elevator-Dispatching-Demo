@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8dc5b38a-cb46-4af0-8b1b-8c04f164058c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Elevator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Elevator.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +129,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621000328074</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="把会闪退的毛病改好了！">
+      <created>1621002118150</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1621002118150</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,28 +163,29 @@
     <MESSAGE value="#9 open出现问题。。。" />
     <MESSAGE value="#9 实现了暂停 以及OPEN！这是个很好的版本！下一步是加上楼道内的按钮" />
     <MESSAGE value="把会闪退的毛病改了" />
-    <option name="LAST_COMMIT_MESSAGE" value="把会闪退的毛病改了" />
+    <MESSAGE value="把会闪退的毛病改好了！" />
+    <option name="LAST_COMMIT_MESSAGE" value="把会闪退的毛病改好了！" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="389" y="5" key="CommitChangelistDialog2" timestamp="1621000327205">
+    <state x="389" y="5" key="CommitChangelistDialog2" timestamp="1621002117581">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="389" y="5" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1621000327205" />
-    <state width="1515" height="210" key="GridCell.Tab.0.bottom" timestamp="1621002072439">
+    <state x="389" y="5" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1621002117581" />
+    <state width="1515" height="210" key="GridCell.Tab.0.bottom" timestamp="1621002132401">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1621002072439" />
-    <state width="1515" height="210" key="GridCell.Tab.0.center" timestamp="1621002072439">
+    <state width="1515" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1621002132401" />
+    <state width="1515" height="210" key="GridCell.Tab.0.center" timestamp="1621002132400">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1621002072439" />
-    <state width="1515" height="210" key="GridCell.Tab.0.left" timestamp="1621002072439">
+    <state width="1515" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1621002132400" />
+    <state width="1515" height="210" key="GridCell.Tab.0.left" timestamp="1621002132400">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1621002072439" />
-    <state width="1515" height="210" key="GridCell.Tab.0.right" timestamp="1621002072439">
+    <state width="1515" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1621002132400" />
+    <state width="1515" height="210" key="GridCell.Tab.0.right" timestamp="1621002132401">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1621002072439" />
+    <state width="1515" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1621002132401" />
   </component>
 </project>
