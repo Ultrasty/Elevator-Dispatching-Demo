@@ -7,7 +7,6 @@
 
 
 import sys
-import threading
 import time
 from functools import partial
 
@@ -125,8 +124,8 @@ class WorkThread(QThread):
     def run(self):
         while (1):
 
-            if should_sleep[self.int - 1] == 1:
 
+            if should_sleep[self.int - 1] == 1:
                 ex.findChild(QPushButton, "open{0}".format(self.int)).setStyleSheet(
                     "QPushButton{background-image: url(open.png)}")
                 time.sleep(2)
@@ -175,7 +174,6 @@ def check(the_int):
 
         if state[the_int - 1] == -1:
             if (floor[the_int - 1] in elevator_goal[the_int - 1]) or (floor[the_int - 1] in people_down):
-
                 should_sleep[the_int - 1 + 5] = 1
 
         if state[the_int - 1] == 1:
@@ -213,7 +211,6 @@ def check(the_int):
         # ------------------------间隔的时间------------------------ #
 
 
-
 def pause(elev):
     if pause[elev - 1] == 0:
         pause[elev - 1] = 1
@@ -228,7 +225,6 @@ def set_goal(elev, flr):  # 设定目标楼层
     ex.findChild(QPushButton, "{0}+{1}".format(elev, flr)).setStyleSheet(
         "QPushButton{background-image: url(background.png)}")
     elevator_goal[elev - 1].add(flr)
-
 
 
 def set_global_goal_up(flr):  # 设定楼道里上楼请求所在的楼层
@@ -284,8 +280,6 @@ if __name__ == '__main__':
     people_down = set([])
 
     # 5个锁
-
-
 
     # 五个线程对应五部电梯，每隔一定时间检查每部电梯的状态和elevator_goal数组，并作出相应的行动
     t1 = WorkThread(1)
